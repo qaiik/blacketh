@@ -4,17 +4,22 @@ function randomPack() {
 }
 
 class pSpammer {
-  constructor() {}
+  constructor() {
+    this.pack = null
+  }
   start() {
     let iint = setInterval(() => {
+      this.pack = randomPack()
       blacket.requests.post("https://v2.blacket.org/worker/open", {
-        pack: randomPack()
-      }, handle)
+        pack: this.pack
+      }, (d) => {
+        handle(d, this.pack)
+      })
     }, 1000)
 
-    function handle(d) {
-      if (d.error) clearInterval(iint)
-      console.log(d)
+    function handle(d, pack) {
+      if (d.error) location.reload()
+      console.log(pack, d)
     }
   }
 }
